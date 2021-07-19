@@ -3,32 +3,29 @@ const selectOne = document.querySelector('.select-one');
 const selectTwo = document.querySelector('.select-two');
 const inputOne = document.querySelector('.input-one');
 const inputTwo = document.querySelector('.input-two');
+const rate = document.getElementById("rate");
+const swap = document.getElementById("swap");
 
-let html = ``;
-
-const getData = async () => {
+const convert = async () => {
+    const currency_one = selectOne.value;
+    const currency_two = selectTwo.value;
     const resp = await fetch(url);
     const data = await resp.json();
-    const arrKeys = Object.keys(data.rates);
-    const rates = data.rates;
-    // console.log(arrKeys)
-    arrKeys.forEach(item => {
-        return html += `<option value=${item}>${item}</option>`;
-    });
-    for (let i = 0; i < arrKeys.length; i++) {
-        selectOne.innerHTML = html;
-    }
-    for (let i = 0; i < arrKeys.length; i++) {
-        selectTwo.innerHTML = html;
-    }
-    console.log(rates)
-}
+    const currentRate = data.rates[currency_two];
+    rate.innerText = `1 ${currency_one} = ${currentRate} ${currency_two}`;
+    inputTwo.value = (inputOne.value * currentRate).toFixed(2);
+};
 
-const convert = () => {
-    console.log('hi')
-}
+swap.addEventListener("click", () => {
+    const storedValue = selectOne.value;
+    selectOne.value = selectTwo.value;
+    selectTwo.value = storedValue;
+    convert();
+});
 
 inputOne.addEventListener('input', convert);
 inputTwo.addEventListener('input', convert);
 selectOne.addEventListener('change', convert);
 selectTwo.addEventListener('change', convert);
+
+convert();
