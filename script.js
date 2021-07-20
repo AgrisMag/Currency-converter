@@ -14,7 +14,11 @@ const convert = async () => {
     const currentRate = data.rates[currency_two];
     rate.innerText = `1 ${currency_one} = ${currentRate} ${currency_two}`;
     inputTwo.value = (inputOne.value * currentRate).toFixed(2);
+
+    console.log(currentRate)
 };
+
+
 
 swap.addEventListener("click", () => {
     const storedValue = selectOne.value;
